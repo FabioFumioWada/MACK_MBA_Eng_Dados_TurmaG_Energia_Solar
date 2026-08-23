@@ -1,0 +1,30 @@
+bundle:
+  name: mack_mba_energia_solar
+
+resources:
+  jobs:
+    pipeline_raw_trusted_refined:
+      name: "Pipeline Mensal — Raw > Trusted > Refined"
+      tasks:
+        - task_key: ingestao_raw
+          notebook_task:
+            notebook_path: ../raw
+        - task_key: limpeza_trusted
+          depends_on:
+            - task_key: ingestao_raw
+          notebook_task:
+            notebook_path: ../trusted/eda_nacional.py
+        - task_key: consolidacao_refined
+          depends_on:
+            - task_key: limpeza_trusted
+          notebook_task:
+            notebook_path: ../refined/eda_correlacao.py
+      schedule:
+        quartz_cron_expression: "0 0 6 1 * ?"
+        timezone_id: "America/Sao_Paulo"
+
+targets:
+  dev:
+    default: true
+    workspace:
+      host: https://dbc-7274ec51-331f.cloud.databricks.com
