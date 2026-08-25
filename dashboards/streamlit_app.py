@@ -332,12 +332,12 @@ with tab_solar:
 
     else:
 
-    df = df_solar.copy()
+        df = df_solar.copy()
 
-st.write("DEBUG - colunas:", df.columns.tolist())
-st.write("DEBUG - quantidade de linhas:", len(df))
-st.write("DEBUG - primeiros valores de mes:", df["mes"].head(10).tolist())
-st.write("DEBUG - tipo original de mes:", df["mes"].dtype)
+        st.write("DEBUG - colunas:", df.columns.tolist())
+        st.write("DEBUG - quantidade de linhas:", len(df))
+        st.write("DEBUG - primeiros valores de mes:", df["mes"].head(10).tolist())
+        st.write("DEBUG - tipo original de mes:", df["mes"].dtype)
 
         # ----------------------------------------------------
         # VARIÁVEIS
