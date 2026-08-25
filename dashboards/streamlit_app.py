@@ -1,59 +1,33 @@
 import streamlit as st
 import pandas as pd
 
-# Configuração da página
 st.set_page_config(
     page_title="Energia em Dados",
-    page_icon="☀️",
     layout="wide"
 )
 
-# Título
-st.title("☀️ Energia em Dados")
-st.markdown("### Panorama nacional da geração de energia")
+st.title("Energia em Dados")
+st.subheader("Diagnóstico das bases")
 
-st.divider()
+arquivos = {
+    "Bandeiras": "../trusted/bandeira_mensal.parquet",
+    "ENA": "../trusted/ena_mensal.parquet",
+    "Solar": "../trusted/solar_mensal_nacional.parquet"
+}
 
-# Carregamento das bases
-@st.cache_data
-def carregar_dados():
+for nome, caminho in arquivos.items():
 
-    bandeiras = pd.read_parquet(
-        "trusted/bandeira_mensal.parquet"
-    )
+    st.header(nome)
 
-    ena = pd.read_parquet(
-        "trusted/ena_mensal.parquet"
-    )
+    try:
+        df = pd.read_parquet(caminho)
 
-    solar = pd.read_parquet(
-        "trusted/solar_mensal_nacional.parquet"
-    )
+        st.write("Dimensões:", df.shape)
 
-    return bandeiras, ena, solar
+        st.write("Colunas:")
+        st.write(list(df.columns))
 
+        st.dataframe(df.head())
 
-bandeiras, ena, solar = carregar_dados()
-
-st.success("Bases de dados carregadas com sucesso.")
-
-# Informações iniciais
-col1, col2, col3 = st.columns(3)
-
-with col1:
-    st.metric(
-        "Registros — Bandeiras",
-        f"{len(bandeiras):,}"
-    )
-
-with col2:
-    st.metric(
-        "Registros — ENA",
-        f"{len(ena):,}"
-    )
-
-with col3:
-    st.metric(
-        "Registros — Solar",
-        f"{len(solar):,}"
-    )
+    except Exception as e:
+        st.error(f"Erro ao carregar {nome}: {e}")
