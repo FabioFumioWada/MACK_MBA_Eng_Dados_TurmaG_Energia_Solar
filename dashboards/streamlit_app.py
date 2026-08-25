@@ -332,24 +332,12 @@ with tab_solar:
 
     else:
 
-        df = df_solar.copy()
+    df = df_solar.copy()
 
-        # ----------------------------------------------------
-        # PREPARAÇÃO
-        # ----------------------------------------------------
-
-        if "mes" in df.columns:
-
-            df["mes"] = pd.to_datetime(
-                df["mes"],
-                errors="coerce"
-            )
-
-            df = df.dropna(
-                subset=["mes"]
-            )
-
-            df = df.sort_values("mes")
+st.write("DEBUG - colunas:", df.columns.tolist())
+st.write("DEBUG - quantidade de linhas:", len(df))
+st.write("DEBUG - primeiros valores de mes:", df["mes"].head(10).tolist())
+st.write("DEBUG - tipo original de mes:", df["mes"].dtype)
 
         # ----------------------------------------------------
         # VARIÁVEIS
