@@ -11,11 +11,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
+
       - name: Install dependencies
         run: pip install pandas requests openpyxl
-      - name: Check scripts compile
-        run: python -m py_compile trusted/eda_nacional.py.py refined/eda_correlacao.py.py dashboards/dashboard_eda.py.py
+
+      - name: Check Python scripts compile
+        run: |
+          find . -type f -name "*.py" \
+            -not -path "./.git/*" \
+            -print0 | xargs -0 python -m py_compile
