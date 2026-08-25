@@ -19,8 +19,7 @@ jobs:
           python-version: "3.11"
 
       - name: Install dependencies
-        run: |
-          pip install pandas requests openpyxl
+        run: pip install pandas requests openpyxl
 
       - name: Check Python scripts compile
         run: |
