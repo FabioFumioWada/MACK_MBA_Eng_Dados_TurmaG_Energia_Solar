@@ -22,27 +22,35 @@ st.set_page_config(
 st.markdown("""
 <style>
 
+/* =========================================================
+   FUNDO GERAL
+   ========================================================= */
+
 .stApp {
     background:
         radial-gradient(
-            circle at 10% 0%,
+            circle at 5% 0%,
             rgba(255, 193, 7, 0.10),
-            transparent 28%
+            transparent 25%
         ),
         radial-gradient(
-            circle at 90% 15%,
+            circle at 95% 5%,
             rgba(0, 119, 255, 0.08),
-            transparent 30%
+            transparent 28%
+        ),
+        repeating-linear-gradient(
+            90deg,
+            rgba(16,42,67,0.018) 0px,
+            rgba(16,42,67,0.018) 1px,
+            transparent 1px,
+            transparent 80px
         ),
         linear-gradient(
             180deg,
-            #f5f8fc 0%,
+            #f7f9fc 0%,
             #eef3f8 100%
         );
-
-    color: #102a43;
 }
-
 
 .block-container {
     max-width: 1450px;
@@ -51,25 +59,37 @@ st.markdown("""
 }
 
 
-/* HEADER */
+/* =========================================================
+   HEADER PRINCIPAL
+   ========================================================= */
 
 .hero {
-    padding: 12px 0 28px 0;
+    padding: 10px 0 30px 0;
     border-bottom: 1px solid #d8e2ec;
-    margin-bottom: 25px;
+    margin-bottom: 22px;
+}
+
+.hero-topline {
+    color: #1677ff;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
 }
 
 .hero-title {
-    font-size: 38px;
+    font-size: 40px;
     font-weight: 850;
-    letter-spacing: -1.8px;
+    letter-spacing: -2px;
     color: #102a43;
+    line-height: 1.05;
 }
 
 .hero-subtitle {
     color: #627d98;
     font-size: 14px;
-    margin-top: 4px;
+    margin-top: 8px;
 }
 
 .sun {
@@ -77,32 +97,109 @@ st.markdown("""
 }
 
 
-/* SECTION */
+/* =========================================================
+   CABEÇALHOS DE SEÇÃO
+   ========================================================= */
+
+.section-header {
+    margin-top: 34px;
+    margin-bottom: 18px;
+    padding-left: 15px;
+    border-left: 4px solid #f4b942;
+}
+
+.section-number {
+    color: #1677ff;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1.8px;
+    margin-bottom: 4px;
+}
 
 .section-title {
-    font-size: 21px;
-    font-weight: 800;
+    font-size: 23px;
+    font-weight: 850;
     color: #102a43;
-    margin-top: 30px;
-    margin-bottom: 5px;
+    letter-spacing: -0.5px;
 }
 
 .section-description {
     color: #627d98;
     font-size: 13px;
-    margin-bottom: 18px;
+    margin-top: 5px;
 }
 
 
-/* KPI */
+/* =========================================================
+   BANNER
+   ========================================================= */
+
+.banner {
+    position: relative;
+    overflow: hidden;
+
+    background:
+        radial-gradient(
+            circle at 92% 15%,
+            rgba(255,209,102,0.20),
+            transparent 24%
+        ),
+        radial-gradient(
+            circle at 70% 100%,
+            rgba(22,119,255,0.12),
+            transparent 35%
+        ),
+        linear-gradient(
+            135deg,
+            #071d35,
+            #0b3559
+        );
+
+    border-radius: 20px;
+    padding: 28px 32px;
+    margin: 25px 0;
+
+    box-shadow:
+        0 14px 40px rgba(7,29,53,0.14);
+}
+
+.banner-label {
+    color: #8ec5ff;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 7px;
+}
+
+.banner-title {
+    color: #ffd166;
+    font-size: 21px;
+    font-weight: 850;
+}
+
+.banner-text {
+    color: #d9e8f5;
+    font-size: 13px;
+    line-height: 1.7;
+    max-width: 900px;
+    margin-top: 9px;
+}
+
+
+/* =========================================================
+   KPIs
+   ========================================================= */
 
 .kpi {
-    background: rgba(255,255,255,0.94);
+    background: rgba(255,255,255,0.96);
     border: 1px solid #d9e2ec;
-    border-radius: 16px;
+    border-radius: 17px;
     padding: 20px;
-    min-height: 125px;
-    box-shadow: 0 8px 25px rgba(16,42,67,0.06);
+    min-height: 130px;
+
+    box-shadow:
+        0 8px 25px rgba(16,42,67,0.055);
 }
 
 .kpi:hover {
@@ -111,9 +208,9 @@ st.markdown("""
 
 .kpi-label {
     color: #627d98;
-    font-size: 11px;
-    font-weight: 800;
-    letter-spacing: 0.8px;
+    font-size: 10px;
+    font-weight: 850;
+    letter-spacing: 1px;
     margin-bottom: 10px;
 }
 
@@ -127,57 +224,59 @@ st.markdown("""
 .kpi-caption {
     color: #829ab1;
     font-size: 11px;
-    margin-top: 6px;
+    margin-top: 7px;
 }
 
 
-/* BANNER */
+/* =========================================================
+   CARDS DE METODOLOGIA
+   ========================================================= */
 
-.banner {
-    background:
-        radial-gradient(
-            circle at 90% 20%,
-            rgba(255,209,102,0.22),
-            transparent 25%
-        ),
-        linear-gradient(
-            135deg,
-            #071d35,
-            #0b3559
-        );
-
-    border-radius: 18px;
-    padding: 25px 30px;
-    margin: 25px 0;
+.info-box {
+    background: rgba(255,255,255,0.94);
+    border: 1px solid #d9e2ec;
+    border-radius: 17px;
+    padding: 23px;
+    min-height: 170px;
 
     box-shadow:
-        0 12px 35px rgba(7,29,53,0.15);
+        0 8px 25px rgba(16,42,67,0.045);
 }
 
-.banner-title {
-    color: #ffd166;
-    font-size: 20px;
+.info-label {
+    color: #1677ff;
+    font-size: 10px;
+    font-weight: 850;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
+
+.info-title {
+    color: #102a43;
+    font-size: 18px;
     font-weight: 800;
+    margin-bottom: 10px;
 }
 
-.banner-text {
-    color: #d9e8f5;
-    font-size: 13px;
+.info-text {
+    color: #627d98;
+    font-size: 12px;
     line-height: 1.7;
-    max-width: 900px;
-    margin-top: 8px;
 }
 
 
-/* TABS */
+/* =========================================================
+   TABS
+   ========================================================= */
 
 .stTabs [data-baseweb="tab-list"] {
-    gap: 24px;
+    gap: 28px;
     border-bottom: 1px solid #d9e2ec;
 }
 
 .stTabs [data-baseweb="tab"] {
-    font-weight: 700;
+    font-weight: 750;
     color: #627d98;
 }
 
@@ -186,24 +285,16 @@ st.markdown("""
 }
 
 
-/* INFO */
-
-.info-box {
-    background: white;
-    border: 1px solid #d9e2ec;
-    border-radius: 16px;
-    padding: 22px;
-    box-shadow: 0 8px 25px rgba(16,42,67,0.05);
-}
-
-
-/* FOOTER */
+/* =========================================================
+   RODAPÉ
+   ========================================================= */
 
 .footer {
     text-align: center;
     color: #829ab1;
-    font-size: 11px;
-    padding-top: 45px;
+    font-size: 10px;
+    padding-top: 50px;
+    letter-spacing: 0.3px;
 }
 
 </style>
@@ -244,24 +335,22 @@ df_bandeiras = carregar_base(arquivos["Bandeiras"])
 
 def preparar_data(df, coluna="mes"):
 
+    if df is None:
+        return None
+
     df = df.copy()
 
     if coluna not in df.columns:
         return df
 
-    # Converte diferentes formatos de data para datetime
     df[coluna] = pd.to_datetime(
-        df[coluna].astype(str),
+        df[coluna],
         errors="coerce"
     )
 
-    # Remove somente datas inválidas
-    df = df.dropna(subset=[coluna]).copy()
+    df = df.dropna(subset=[coluna])
 
-    # Ordena cronologicamente
-    df = df.sort_values(coluna).reset_index(drop=True)
-
-    return df
+    return df.sort_values(coluna).reset_index(drop=True)
 
 
 def formatar_numero(valor):
@@ -285,59 +374,97 @@ def formatar_decimal(valor, casas=1):
     )
 
 
-def estilo_grafico(fig, altura=400):
+def grafico_base(fig, altura=400):
 
     fig.update_layout(
         height=altura,
         margin=dict(
-            l=20,
-            r=20,
+            l=15,
+            r=15,
             t=55,
-            b=30
+            b=25
         ),
         paper_bgcolor="rgba(0,0,0,0)",
-        plot_bgcolor="rgba(255,255,255,0.75)",
+        plot_bgcolor="rgba(255,255,255,0.78)",
+
         font=dict(
             family="Arial",
             color="#102a43"
         ),
+
         hovermode="x unified",
+
+        xaxis=dict(
+            showgrid=False,
+            linecolor="#d9e2ec"
+        ),
+
+        yaxis=dict(
+            gridcolor="#e6edf3",
+            zeroline=False
+        ),
+
         legend=dict(
             orientation="h",
             yanchor="bottom",
             y=1.02,
             xanchor="left",
             x=0
-        ),
-        xaxis=dict(
-            showgrid=False
-        ),
-        yaxis=dict(
-            gridcolor="#e6edf3"
         )
     )
 
     return fig
 
 
+def cabecalho_secao(numero, titulo, descricao):
+
+    st.markdown(
+        f"""
+        <div class="section-header">
+
+            <div class="section-number">
+                {numero}
+            </div>
+
+            <div class="section-title">
+                {titulo}
+            </div>
+
+            <div class="section-description">
+                {descricao}
+            </div>
+
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
+
 # ============================================================
 # HEADER
 # ============================================================
 
-st.markdown("""
-<div class="hero">
+st.markdown(
+    """
+    <div class="hero">
 
-    <div class="hero-title">
-        <span class="sun">☀️</span>
-        ENERGIA EM DADOS
+        <div class="hero-topline">
+            DATA INTELLIGENCE • ENERGY
+        </div>
+
+        <div class="hero-title">
+            <span class="sun">☀️</span>
+            ENERGIA EM DADOS
+        </div>
+
+        <div class="hero-subtitle">
+            Inteligência de dados aplicada ao setor elétrico brasileiro
+        </div>
+
     </div>
-
-    <div class="hero-subtitle">
-        Inteligência de dados aplicada ao setor elétrico brasileiro
-    </div>
-
-</div>
-""", unsafe_allow_html=True)
+    """,
+    unsafe_allow_html=True
+)
 
 
 # ============================================================
@@ -375,13 +502,13 @@ with tab_solar:
 
             st.error(
                 "A base Solar foi carregada, mas não possui "
-                "registros válidos na coluna 'mes'."
+                "registros válidos."
             )
 
         else:
 
             # ------------------------------------------------
-            # ÚLTIMO REGISTRO
+            # DADOS PRINCIPAIS
             # ------------------------------------------------
 
             ultima = df.iloc[-1]
@@ -403,143 +530,159 @@ with tab_solar:
                 f"{periodo_inicio} – {periodo_fim}"
             )
 
+            total_registros = len(df)
+
 
             # ------------------------------------------------
             # BANNER
             # ------------------------------------------------
 
-            st.markdown("""
-            <div class="banner">
+            st.markdown(
+                """
+                <div class="banner">
 
-                <div class="banner-title">
-                    ☀ PANORAMA DA GERAÇÃO DISTRIBUÍDA SOLAR
+                    <div class="banner-label">
+                        01 / GERAÇÃO DISTRIBUÍDA
+                    </div>
+
+                    <div class="banner-title">
+                        ☀ PANORAMA DA ENERGIA SOLAR
+                    </div>
+
+                    <div class="banner-text">
+                        Acompanhe a expansão da geração distribuída
+                        fotovoltaica por meio da evolução das conexões,
+                        da capacidade instalada e dos principais
+                        indicadores da série histórica.
+                    </div>
+
                 </div>
-
-                <div class="banner-text">
-                    Acompanhe a evolução das conexões fotovoltaicas,
-                    da potência instalada e dos principais indicadores
-                    da série histórica disponível.
-                </div>
-
-            </div>
-            """, unsafe_allow_html=True)
+                """,
+                unsafe_allow_html=True
+            )
 
 
             # ------------------------------------------------
             # KPIs
             # ------------------------------------------------
 
+            cabecalho_secao(
+                "01",
+                "Visão executiva",
+                "Principais indicadores da série histórica disponível."
+            )
+
             c1, c2, c3, c4 = st.columns(4)
 
 
             with c1:
 
-                st.markdown(f"""
-                <div class="kpi">
+                st.markdown(
+                    f"""
+                    <div class="kpi">
 
-                    <div class="kpi-label">
-                        CONEXÕES ACUMULADAS
+                        <div class="kpi-label">
+                            CONEXÕES ACUMULADAS
+                        </div>
+
+                        <div class="kpi-value">
+                            {formatar_numero(conexoes)}
+                        </div>
+
+                        <div class="kpi-caption">
+                            último período disponível
+                        </div>
+
                     </div>
-
-                    <div class="kpi-value">
-                        {formatar_numero(conexoes)}
-                    </div>
-
-                    <div class="kpi-caption">
-                        último período disponível
-                    </div>
-
-                </div>
-                """, unsafe_allow_html=True)
+                    """,
+                    unsafe_allow_html=True
+                )
 
 
             with c2:
 
-                st.markdown(f"""
-                <div class="kpi">
+                st.markdown(
+                    f"""
+                    <div class="kpi">
 
-                    <div class="kpi-label">
-                        POTÊNCIA ACUMULADA
+                        <div class="kpi-label">
+                            POTÊNCIA ACUMULADA
+                        </div>
+
+                        <div class="kpi-value">
+                            {formatar_decimal(potencia_mw)} MW
+                        </div>
+
+                        <div class="kpi-caption">
+                            capacidade instalada
+                        </div>
+
                     </div>
-
-                    <div class="kpi-value">
-                        {formatar_decimal(potencia_mw)} MW
-                    </div>
-
-                    <div class="kpi-caption">
-                        capacidade instalada
-                    </div>
-
-                </div>
-                """, unsafe_allow_html=True)
+                    """,
+                    unsafe_allow_html=True
+                )
 
 
             with c3:
 
-                st.markdown(f"""
-                <div class="kpi">
+                st.markdown(
+                    f"""
+                    <div class="kpi">
 
-                    <div class="kpi-label">
-                        PERÍODO ANALISADO
+                        <div class="kpi-label">
+                            PERÍODO ANALISADO
+                        </div>
+
+                        <div class="kpi-value">
+                            {periodo}
+                        </div>
+
+                        <div class="kpi-caption">
+                            série mensal
+                        </div>
+
                     </div>
-
-                    <div class="kpi-value">
-                        {periodo}
-                    </div>
-
-                    <div class="kpi-caption">
-                        série mensal
-                    </div>
-
-                </div>
-                """, unsafe_allow_html=True)
+                    """,
+                    unsafe_allow_html=True
+                )
 
 
             with c4:
 
-                total_registros = len(df)
+                st.markdown(
+                    f"""
+                    <div class="kpi">
 
-                st.markdown(f"""
-                <div class="kpi">
+                        <div class="kpi-label">
+                            REGISTROS MENSAIS
+                        </div>
 
-                    <div class="kpi-label">
-                        REGISTROS MENSAIS
+                        <div class="kpi-value">
+                            {formatar_numero(total_registros)}
+                        </div>
+
+                        <div class="kpi-caption">
+                            observações disponíveis
+                        </div>
+
                     </div>
-
-                    <div class="kpi-value">
-                        {formatar_numero(total_registros)}
-                    </div>
-
-                    <div class="kpi-caption">
-                        observações disponíveis
-                    </div>
-
-                </div>
-                """, unsafe_allow_html=True)
+                    """,
+                    unsafe_allow_html=True
+                )
 
 
             # ------------------------------------------------
             # EVOLUÇÃO
             # ------------------------------------------------
 
-            st.markdown("""
-            <div class="section-title">
-                Evolução da geração distribuída
-            </div>
-
-            <div class="section-description">
-                Crescimento acumulado das conexões e da potência
-                fotovoltaica ao longo da série histórica.
-            </div>
-            """, unsafe_allow_html=True)
-
+            cabecalho_secao(
+                "02",
+                "Evolução da geração distribuída",
+                "Crescimento acumulado das conexões e da potência fotovoltaica."
+            )
 
             c1, c2 = st.columns(2)
 
-
-            # ------------------------------------------------
-            # CONEXÕES
-            # ------------------------------------------------
 
             with c1:
 
@@ -566,18 +709,12 @@ with tab_solar:
                         title="Conexões acumuladas"
                     )
 
-                    fig = estilo_grafico(fig)
-
                     st.plotly_chart(
-                        fig,
+                        grafico_base(fig),
                         use_container_width=True,
                         config={"displayModeBar": False}
                     )
 
-
-            # ------------------------------------------------
-            # POTÊNCIA
-            # ------------------------------------------------
 
             with c2:
 
@@ -604,30 +741,24 @@ with tab_solar:
                         title="Potência acumulada (MW)"
                     )
 
-                    fig = estilo_grafico(fig)
-
                     st.plotly_chart(
-                        fig,
+                        grafico_base(fig),
                         use_container_width=True,
                         config={"displayModeBar": False}
                     )
 
 
             # ------------------------------------------------
-            # NOVA POTÊNCIA
+            # EXPANSÃO DA CAPACIDADE
             # ------------------------------------------------
 
             if "potencia_nova_kw" in df.columns:
 
-                st.markdown("""
-                <div class="section-title">
-                    Expansão da capacidade
-                </div>
-
-                <div class="section-description">
-                    Potência adicionada em cada período da série.
-                </div>
-                """, unsafe_allow_html=True)
+                cabecalho_secao(
+                    "03",
+                    "Expansão da capacidade",
+                    "Potência adicionada em cada período da série."
+                )
 
                 fig = go.Figure()
 
@@ -644,38 +775,30 @@ with tab_solar:
                     title="Nova potência instalada por período (kW)"
                 )
 
-                fig = estilo_grafico(fig, 380)
-
                 st.plotly_chart(
-                    fig,
+                    grafico_base(fig, 390),
                     use_container_width=True,
                     config={"displayModeBar": False}
                 )
 
 
             # ------------------------------------------------
-            # RESUMO ANUAL
+            # VISÃO ANUAL
             # ------------------------------------------------
 
-            if (
-                "mes" in df.columns
-                and "novas_conexoes" in df.columns
-            ):
+            if "novas_conexoes" in df.columns:
 
-                st.markdown("""
-                <div class="section-title">
-                    Visão anual
-                </div>
-
-                <div class="section-description">
-                    Consolidação anual das novas conexões.
-                </div>
-                """, unsafe_allow_html=True)
+                cabecalho_secao(
+                    "04",
+                    "Visão anual",
+                    "Consolidação das novas conexões por ano."
+                )
 
                 df["ano"] = df["mes"].dt.year
 
                 anual = (
-                    df.groupby("ano")["novas_conexoes"]
+                    df
+                    .groupby("ano")["novas_conexoes"]
                     .sum()
                     .reset_index()
                 )
@@ -697,10 +820,8 @@ with tab_solar:
                     yaxis_title="Conexões"
                 )
 
-                fig = estilo_grafico(fig, 400)
-
                 st.plotly_chart(
-                    fig,
+                    grafico_base(fig, 390),
                     use_container_width=True,
                     config={"displayModeBar": False}
                 )
@@ -710,11 +831,11 @@ with tab_solar:
             # DADOS
             # ------------------------------------------------
 
-            st.markdown("""
-            <div class="section-title">
-                Dados consolidados
-            </div>
-            """, unsafe_allow_html=True)
+            cabecalho_secao(
+                "05",
+                "Dados consolidados",
+                "Prévia da camada utilizada na visualização."
+            )
 
             st.dataframe(
                 df.tail(12),
@@ -739,81 +860,100 @@ with tab_ena:
 
         df = preparar_data(df_ena)
 
-        st.markdown("""
-        <div class="banner">
+        if df.empty:
 
-            <div class="banner-title">
-                ⚡ ENERGIA NATURAL AFLUENTE
-            </div>
+            st.error(
+                "A base ENA não possui registros válidos."
+            )
 
-            <div class="banner-text">
-                Exploração visual dos indicadores disponíveis
-                na base ENA.
-            </div>
+        else:
 
-        </div>
-        """, unsafe_allow_html=True)
+            st.markdown(
+                """
+                <div class="banner">
 
-        st.markdown(
-            f"**Registros disponíveis:** "
-            f"{len(df):,}".replace(",", ".")
-        )
+                    <div class="banner-label">
+                        02 / ENERGIA NATURAL AFLUENTE
+                    </div>
 
-        colunas_numericas = df.select_dtypes(
-            include="number"
-        ).columns.tolist()
+                    <div class="banner-title">
+                        ⚡ ENERGIA NATURAL AFLUENTE
+                    </div>
 
-        if colunas_numericas:
+                    <div class="banner-text">
+                        Exploração visual dos indicadores de Energia
+                        Natural Afluente e sua relação com o histórico
+                        do sistema elétrico brasileiro.
+                    </div>
 
-            coluna_principal = None
+                </div>
+                """,
+                unsafe_allow_html=True
+            )
 
-            for coluna in colunas_numericas:
+            cabecalho_secao(
+                "01",
+                "Indicadores da ENA",
+                "Evolução dos principais indicadores disponíveis na base."
+            )
 
-                if "nacional" in coluna.lower():
+            st.metric(
+                "Registros disponíveis",
+                formatar_numero(len(df))
+            )
 
-                    coluna_principal = coluna
-                    break
+            colunas_ena = [
+                coluna
+                for coluna in df.columns
+                if coluna != "mes"
+                and pd.api.types.is_numeric_dtype(df[coluna])
+            ]
 
-            if coluna_principal is None:
+            if colunas_ena:
 
-                coluna_principal = colunas_numericas[0]
+                coluna_principal = (
+                    "ena_nacional_mwmed"
+                    if "ena_nacional_mwmed" in df.columns
+                    else colunas_ena[0]
+                )
 
-            fig = go.Figure()
+                fig = go.Figure()
 
-            fig.add_trace(
-                go.Scatter(
-                    x=(
-                        df["mes"]
-                        if "mes" in df.columns
-                        else df.index
-                    ),
-                    y=df[coluna_principal],
-                    mode="lines",
-                    name=coluna_principal,
-                    line=dict(
-                        color="#1677ff",
-                        width=3
+                fig.add_trace(
+                    go.Scatter(
+                        x=df["mes"],
+                        y=df[coluna_principal],
+                        mode="lines",
+                        name=coluna_principal,
+                        line=dict(
+                            color="#1677ff",
+                            width=3
+                        )
                     )
                 )
+
+                fig.update_layout(
+                    title=coluna_principal
+                )
+
+                st.plotly_chart(
+                    grafico_base(fig, 420),
+                    use_container_width=True,
+                    config={"displayModeBar": False}
+                )
+
+
+            cabecalho_secao(
+                "02",
+                "Dados consolidados",
+                "Prévia dos indicadores disponíveis na camada Trusted."
             )
 
-            fig.update_layout(
-                title=coluna_principal
-            )
-
-            fig = estilo_grafico(fig)
-
-            st.plotly_chart(
-                fig,
+            st.dataframe(
+                df.tail(12),
                 use_container_width=True,
-                config={"displayModeBar": False}
+                hide_index=True
             )
-
-        st.dataframe(
-            df.tail(15),
-            use_container_width=True,
-            hide_index=True
-        )
 
 
 # ============================================================
@@ -825,159 +965,318 @@ with tab_bandeiras:
     if df_bandeiras is None:
 
         st.error(
-            "Não foi possível carregar a base de bandeiras."
+            "Não foi possível carregar a base de Bandeiras Tarifárias."
         )
 
     else:
 
         df = preparar_data(df_bandeiras)
 
-        st.markdown("""
-        <div class="banner">
+        if df.empty:
 
-            <div class="banner-title">
-                🏭 BANDEIRAS TARIFÁRIAS
-            </div>
+            st.error(
+                "A base de Bandeiras não possui registros válidos."
+            )
 
-            <div class="banner-text">
-                Visualização dos dados disponíveis na base
-                de bandeiras tarifárias.
-            </div>
+        else:
 
-        </div>
-        """, unsafe_allow_html=True)
+            st.markdown(
+                """
+                <div class="banner">
 
-        colunas_numericas = df.select_dtypes(
-            include="number"
-        ).columns.tolist()
+                    <div class="banner-label">
+                        03 / SINALIZAÇÃO TARIFÁRIA
+                    </div>
 
-        if colunas_numericas:
+                    <div class="banner-title">
+                        🏭 BANDEIRAS TARIFÁRIAS
+                    </div>
 
-            coluna = colunas_numericas[0]
+                    <div class="banner-text">
+                        Visualização da evolução das bandeiras tarifárias
+                        e dos indicadores associados ao período analisado.
+                    </div>
 
-            fig = go.Figure()
+                </div>
+                """,
+                unsafe_allow_html=True
+            )
 
-            fig.add_trace(
-                go.Scatter(
-                    x=(
-                        df["mes"]
-                        if "mes" in df.columns
-                        else df.index
-                    ),
-                    y=df[coluna],
-                    mode="lines+markers",
-                    name=coluna,
-                    line=dict(
-                        color="#f4b942",
-                        width=3
+            cabecalho_secao(
+                "01",
+                "Evolução das bandeiras",
+                "Histórico do indicador disponível na base."
+            )
+
+            coluna_valor = None
+
+            for candidato in [
+                "VlrAdicionalBandeira",
+                "nivel"
+            ]:
+
+                if candidato in df.columns:
+
+                    coluna_valor = candidato
+                    break
+
+
+            if coluna_valor:
+
+                fig = go.Figure()
+
+                fig.add_trace(
+                    go.Scatter(
+                        x=df["mes"],
+                        y=df[coluna_valor],
+                        mode="lines",
+                        name=coluna_valor,
+                        line=dict(
+                            color="#f4b942",
+                            width=3
+                        )
                     )
                 )
+
+                fig.update_layout(
+                    title=coluna_valor
+                )
+
+                st.plotly_chart(
+                    grafico_base(fig, 420),
+                    use_container_width=True,
+                    config={"displayModeBar": False}
+                )
+
+
+            cabecalho_secao(
+                "02",
+                "Dados consolidados",
+                "Prévia dos registros disponíveis."
             )
 
-            fig.update_layout(
-                title=coluna
-            )
-
-            fig = estilo_grafico(fig)
-
-            st.plotly_chart(
-                fig,
+            st.dataframe(
+                df.tail(12),
                 use_container_width=True,
-                config={"displayModeBar": False}
+                hide_index=True
             )
-
-        st.dataframe(
-            df.tail(15),
-            use_container_width=True,
-            hide_index=True
-        )
 
 
 # ============================================================
-# METODOLOGIA
+# ABA METODOLOGIA
 # ============================================================
 
 with tab_metodologia:
 
-    st.markdown("""
-    <div class="section-title">
-        Metodologia e estrutura
-    </div>
+    st.markdown(
+        """
+        <div class="banner">
 
-    <div class="section-description">
-        Visão geral da organização dos dados utilizados
-        no dashboard.
-    </div>
-    """, unsafe_allow_html=True)
+            <div class="banner-label">
+                04 / DATA ARCHITECTURE
+            </div>
 
+            <div class="banner-title">
+                📚 METODOLOGIA E ESTRUTURA
+            </div>
+
+            <div class="banner-text">
+                Visão geral da organização dos dados e da arquitetura
+                utilizada para transformar bases tratadas em uma
+                camada visual de apoio à análise.
+            </div>
+
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
+
+    cabecalho_secao(
+        "01",
+        "Camada de dados",
+        "Organização das bases utilizadas pelo dashboard."
+    )
 
     c1, c2 = st.columns(2)
 
 
     with c1:
 
-        st.markdown("""
-        <div class="info-box">
+        st.markdown(
+            """
+            <div class="info-box">
 
-        ### Camada de dados
+                <div class="info-label">
+                    DATA LAYER
+                </div>
 
-        O dashboard utiliza arquivos em formato **Parquet**
-        armazenados na camada **Trusted** do projeto.
+                <div class="info-title">
+                    Camada Trusted
+                </div>
 
-        <br>
+                <div class="info-text">
+                    Os dados utilizados na visualização são
+                    disponibilizados em arquivos Parquet na camada
+                    Trusted do projeto.
+                </div>
 
-        **Bases utilizadas:**
-
-        - Solar
-        - ENA
-        - Bandeiras tarifárias
-
-        </div>
-        """, unsafe_allow_html=True)
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
 
 
     with c2:
 
-        st.markdown("""
+        st.markdown(
+            """
+            <div class="info-box">
+
+                <div class="info-label">
+                    VISUAL LAYER
+                </div>
+
+                <div class="info-title">
+                    Streamlit
+                </div>
+
+                <div class="info-text">
+                    A aplicação utiliza Streamlit para estruturar
+                    a interface e Plotly para construir as
+                    visualizações interativas.
+                </div>
+
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
+
+
+    cabecalho_secao(
+        "02",
+        "Bases utilizadas",
+        "Principais conjuntos de dados apresentados no dashboard."
+    )
+
+    c1, c2, c3 = st.columns(3)
+
+
+    with c1:
+
+        st.markdown(
+            """
+            <div class="info-box">
+
+                <div class="info-label">
+                    BASE 01
+                </div>
+
+                <div class="info-title">
+                    ☀ Solar
+                </div>
+
+                <div class="info-text">
+                    Indicadores mensais da geração distribuída
+                    fotovoltaica.
+                </div>
+
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
+
+
+    with c2:
+
+        st.markdown(
+            """
+            <div class="info-box">
+
+                <div class="info-label">
+                    BASE 02
+                </div>
+
+                <div class="info-title">
+                    ⚡ ENA
+                </div>
+
+                <div class="info-text">
+                    Indicadores de Energia Natural Afluente
+                    utilizados na análise do setor elétrico.
+                </div>
+
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
+
+
+    with c3:
+
+        st.markdown(
+            """
+            <div class="info-box">
+
+                <div class="info-label">
+                    BASE 03
+                </div>
+
+                <div class="info-title">
+                    🏭 Bandeiras
+                </div>
+
+                <div class="info-text">
+                    Informações relacionadas às bandeiras
+                    tarifárias e seus respectivos indicadores.
+                </div>
+
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
+
+
+    cabecalho_secao(
+        "03",
+        "Arquitetura simplificada",
+        "Fluxo conceitual utilizado para disponibilização dos dados."
+    )
+
+    st.markdown(
+        """
         <div class="info-box">
 
-        ### Visualização
+            <div class="info-text"
+                 style="font-family: monospace; line-height: 2.2;">
 
-        A aplicação foi construída em **Streamlit**,
-        utilizando gráficos interativos e componentes
-        visuais para facilitar a exploração dos dados.
+                Fontes de dados
+                <br>
+                ↓
+                <br>
+                Camada Raw
+                <br>
+                ↓
+                <br>
+                Camada Trusted
+                <br>
+                ↓
+                <br>
+                Dados consolidados
+                <br>
+                ↓
+                <br>
+                Dashboard Streamlit
+                <br>
+                ↓
+                <br>
+                Visualização e análise
 
-        <br>
-
-        O objetivo é transformar as bases tratadas em
-        uma camada visual de apoio à análise.
+            </div>
 
         </div>
-        """, unsafe_allow_html=True)
-
-
-    st.markdown("""
-    <div class="section-title">
-        Arquitetura simplificada
-    </div>
-    """, unsafe_allow_html=True)
-
-
-    st.code(
-        """
-Fontes de dados
-      ↓
-Camada Raw
-      ↓
-Camada Trusted
-      ↓
-Dados consolidados
-      ↓
-Dashboard Streamlit
-      ↓
-Visualização e análise
         """,
-        language="text"
+        unsafe_allow_html=True
     )
 
 
@@ -985,10 +1284,12 @@ Visualização e análise
 # FOOTER
 # ============================================================
 
-st.markdown("""
-<div class="footer">
-
-ENERGIA EM DADOS · MBA Engenharia de Dados · Projeto acadêmico
-
-</div>
-""", unsafe_allow_html=True)
+st.markdown(
+    """
+    <div class="footer">
+        ENERGIA EM DADOS • MBA EM ENGENHARIA DE DADOS
+        • Projeto de análise do setor elétrico brasileiro
+    </div>
+    """,
+    unsafe_allow_html=True
+)
