@@ -39,14 +39,17 @@ st.markdown("""
             #f5f8fc 0%,
             #eef3f8 100%
         );
+
     color: #102a43;
 }
+
 
 .block-container {
     max-width: 1450px;
     padding-top: 2rem;
     padding-bottom: 4rem;
 }
+
 
 /* HEADER */
 
@@ -73,6 +76,7 @@ st.markdown("""
     font-size: 36px;
 }
 
+
 /* SECTION */
 
 .section-title {
@@ -88,6 +92,7 @@ st.markdown("""
     font-size: 13px;
     margin-bottom: 18px;
 }
+
 
 /* KPI */
 
@@ -124,6 +129,7 @@ st.markdown("""
     font-size: 11px;
     margin-top: 6px;
 }
+
 
 /* BANNER */
 
@@ -162,14 +168,6 @@ st.markdown("""
     margin-top: 8px;
 }
 
-/* CHART CONTAINER */
-
-.chart-header {
-    font-size: 15px;
-    font-weight: 750;
-    color: #102a43;
-    margin-top: 15px;
-}
 
 /* TABS */
 
@@ -187,6 +185,7 @@ st.markdown("""
     color: #102a43 !important;
 }
 
+
 /* INFO */
 
 .info-box {
@@ -196,6 +195,9 @@ st.markdown("""
     padding: 22px;
     box-shadow: 0 8px 25px rgba(16,42,67,0.05);
 }
+
+
+/* FOOTER */
 
 .footer {
     text-align: center;
@@ -227,7 +229,7 @@ arquivos = {
 def carregar_base(caminho):
     try:
         return pd.read_parquet(caminho)
-    except Exception as erro:
+    except Exception:
         return None
 
 
@@ -240,7 +242,30 @@ df_bandeiras = carregar_base(arquivos["Bandeiras"])
 # FUNÇÕES AUXILIARES
 # ============================================================
 
+def preparar_data(df, coluna="mes"):
+
+    df = df.copy()
+
+    if coluna not in df.columns:
+        return df
+
+    # Converte diferentes formatos de data para datetime
+    df[coluna] = pd.to_datetime(
+        df[coluna].astype(str),
+        errors="coerce"
+    )
+
+    # Remove somente datas inválidas
+    df = df.dropna(subset=[coluna]).copy()
+
+    # Ordena cronologicamente
+    df = df.sort_values(coluna).reset_index(drop=True)
+
+    return df
+
+
 def formatar_numero(valor):
+
     if pd.isna(valor):
         return "—"
 
@@ -248,17 +273,28 @@ def formatar_numero(valor):
 
 
 def formatar_decimal(valor, casas=1):
+
     if pd.isna(valor):
         return "—"
 
-    return f"{valor:,.{casas}f}".replace(",", "X").replace(".", ",").replace("X", ".")
+    return (
+        f"{valor:,.{casas}f}"
+        .replace(",", "X")
+        .replace(".", ",")
+        .replace("X", ".")
+    )
 
 
 def estilo_grafico(fig, altura=400):
 
     fig.update_layout(
         height=altura,
-        margin=dict(l=20, r=20, t=55, b=30),
+        margin=dict(
+            l=20,
+            r=20,
+            t=55,
+            b=30
+        ),
         paper_bgcolor="rgba(0,0,0,0)",
         plot_bgcolor="rgba(255,255,255,0.75)",
         font=dict(
@@ -327,205 +363,288 @@ with tab_solar:
     if df_solar is None:
 
         st.error(
-            "Não foi possível carregar a base Solar."
+            "Não foi possível carregar a base Solar. "
+            "Verifique o arquivo na camada Trusted."
         )
 
     else:
 
-        df = df_solar.copy()
+        df = preparar_data(df_solar)
 
-        st.write("DEBUG - colunas:", df.columns.tolist())
-        st.write("DEBUG - quantidade de linhas:", len(df))
-        st.write("DEBUG - primeiros valores de mes:", df["mes"].head(10).tolist())
-        st.write("DEBUG - tipo original de mes:", df["mes"].dtype)
+        if df.empty:
 
-        # ----------------------------------------------------
-        # VARIÁVEIS
-        # ----------------------------------------------------
+            st.error(
+                "A base Solar foi carregada, mas não possui "
+                "registros válidos na coluna 'mes'."
+            )
 
-        ultima = df.iloc[-1]
+        else:
 
-        conexoes = ultima.get(
-            "conexoes_acumuladas",
-            0
-        )
+            # ------------------------------------------------
+            # ÚLTIMO REGISTRO
+            # ------------------------------------------------
 
-        potencia_mw = ultima.get(
-            "potencia_acumulada_mw",
-            0
-        )
+            ultima = df.iloc[-1]
 
-        periodo_inicio = (
-            df["mes"].min().strftime("%m/%Y")
-            if "mes" in df.columns
-            else "—"
-        )
+            conexoes = ultima.get(
+                "conexoes_acumuladas",
+                0
+            )
 
-        periodo_fim = (
-            df["mes"].max().strftime("%m/%Y")
-            if "mes" in df.columns
-            else "—"
-        )
+            potencia_mw = ultima.get(
+                "potencia_acumulada_mw",
+                0
+            )
 
-        periodo = (
-            f"{periodo_inicio} – {periodo_fim}"
-        )
+            periodo_inicio = df["mes"].min().strftime("%m/%Y")
+            periodo_fim = df["mes"].max().strftime("%m/%Y")
 
-        # ----------------------------------------------------
-        # BANNER
-        # ----------------------------------------------------
+            periodo = (
+                f"{periodo_inicio} – {periodo_fim}"
+            )
 
-        st.markdown("""
-        <div class="banner">
 
-            <div class="banner-title">
-                ☀ PANORAMA DA GERAÇÃO DISTRIBUÍDA SOLAR
-            </div>
+            # ------------------------------------------------
+            # BANNER
+            # ------------------------------------------------
 
-            <div class="banner-text">
-                Acompanhe a evolução das conexões fotovoltaicas,
-                da potência instalada e dos principais indicadores
-                da série histórica disponível.
-            </div>
+            st.markdown("""
+            <div class="banner">
 
-        </div>
-        """, unsafe_allow_html=True)
-
-        # ----------------------------------------------------
-        # KPIs
-        # ----------------------------------------------------
-
-        c1, c2, c3, c4 = st.columns(4)
-
-        with c1:
-
-            st.markdown(f"""
-            <div class="kpi">
-
-                <div class="kpi-label">
-                    CONEXÕES ACUMULADAS
+                <div class="banner-title">
+                    ☀ PANORAMA DA GERAÇÃO DISTRIBUÍDA SOLAR
                 </div>
 
-                <div class="kpi-value">
-                    {formatar_numero(conexoes)}
-                </div>
-
-                <div class="kpi-caption">
-                    último período disponível
+                <div class="banner-text">
+                    Acompanhe a evolução das conexões fotovoltaicas,
+                    da potência instalada e dos principais indicadores
+                    da série histórica disponível.
                 </div>
 
             </div>
             """, unsafe_allow_html=True)
 
-        with c2:
 
-            st.markdown(f"""
-            <div class="kpi">
+            # ------------------------------------------------
+            # KPIs
+            # ------------------------------------------------
 
-                <div class="kpi-label">
-                    POTÊNCIA ACUMULADA
+            c1, c2, c3, c4 = st.columns(4)
+
+
+            with c1:
+
+                st.markdown(f"""
+                <div class="kpi">
+
+                    <div class="kpi-label">
+                        CONEXÕES ACUMULADAS
+                    </div>
+
+                    <div class="kpi-value">
+                        {formatar_numero(conexoes)}
+                    </div>
+
+                    <div class="kpi-caption">
+                        último período disponível
+                    </div>
+
                 </div>
+                """, unsafe_allow_html=True)
 
-                <div class="kpi-value">
-                    {formatar_decimal(potencia_mw)} MW
+
+            with c2:
+
+                st.markdown(f"""
+                <div class="kpi">
+
+                    <div class="kpi-label">
+                        POTÊNCIA ACUMULADA
+                    </div>
+
+                    <div class="kpi-value">
+                        {formatar_decimal(potencia_mw)} MW
+                    </div>
+
+                    <div class="kpi-caption">
+                        capacidade instalada
+                    </div>
+
                 </div>
+                """, unsafe_allow_html=True)
 
-                <div class="kpi-caption">
-                    capacidade instalada
+
+            with c3:
+
+                st.markdown(f"""
+                <div class="kpi">
+
+                    <div class="kpi-label">
+                        PERÍODO ANALISADO
+                    </div>
+
+                    <div class="kpi-value">
+                        {periodo}
+                    </div>
+
+                    <div class="kpi-caption">
+                        série mensal
+                    </div>
+
                 </div>
+                """, unsafe_allow_html=True)
 
+
+            with c4:
+
+                total_registros = len(df)
+
+                st.markdown(f"""
+                <div class="kpi">
+
+                    <div class="kpi-label">
+                        REGISTROS MENSAIS
+                    </div>
+
+                    <div class="kpi-value">
+                        {formatar_numero(total_registros)}
+                    </div>
+
+                    <div class="kpi-caption">
+                        observações disponíveis
+                    </div>
+
+                </div>
+                """, unsafe_allow_html=True)
+
+
+            # ------------------------------------------------
+            # EVOLUÇÃO
+            # ------------------------------------------------
+
+            st.markdown("""
+            <div class="section-title">
+                Evolução da geração distribuída
+            </div>
+
+            <div class="section-description">
+                Crescimento acumulado das conexões e da potência
+                fotovoltaica ao longo da série histórica.
             </div>
             """, unsafe_allow_html=True)
 
-        with c3:
 
-            st.markdown(f"""
-            <div class="kpi">
+            c1, c2 = st.columns(2)
 
-                <div class="kpi-label">
-                    PERÍODO ANALISADO
+
+            # ------------------------------------------------
+            # CONEXÕES
+            # ------------------------------------------------
+
+            with c1:
+
+                if "conexoes_acumuladas" in df.columns:
+
+                    fig = go.Figure()
+
+                    fig.add_trace(
+                        go.Scatter(
+                            x=df["mes"],
+                            y=df["conexoes_acumuladas"],
+                            mode="lines",
+                            name="Conexões",
+                            line=dict(
+                                color="#1677ff",
+                                width=3
+                            ),
+                            fill="tozeroy",
+                            fillcolor="rgba(22,119,255,0.10)"
+                        )
+                    )
+
+                    fig.update_layout(
+                        title="Conexões acumuladas"
+                    )
+
+                    fig = estilo_grafico(fig)
+
+                    st.plotly_chart(
+                        fig,
+                        use_container_width=True,
+                        config={"displayModeBar": False}
+                    )
+
+
+            # ------------------------------------------------
+            # POTÊNCIA
+            # ------------------------------------------------
+
+            with c2:
+
+                if "potencia_acumulada_mw" in df.columns:
+
+                    fig = go.Figure()
+
+                    fig.add_trace(
+                        go.Scatter(
+                            x=df["mes"],
+                            y=df["potencia_acumulada_mw"],
+                            mode="lines",
+                            name="Potência",
+                            line=dict(
+                                color="#18a999",
+                                width=3
+                            ),
+                            fill="tozeroy",
+                            fillcolor="rgba(24,169,153,0.10)"
+                        )
+                    )
+
+                    fig.update_layout(
+                        title="Potência acumulada (MW)"
+                    )
+
+                    fig = estilo_grafico(fig)
+
+                    st.plotly_chart(
+                        fig,
+                        use_container_width=True,
+                        config={"displayModeBar": False}
+                    )
+
+
+            # ------------------------------------------------
+            # NOVA POTÊNCIA
+            # ------------------------------------------------
+
+            if "potencia_nova_kw" in df.columns:
+
+                st.markdown("""
+                <div class="section-title">
+                    Expansão da capacidade
                 </div>
 
-                <div class="kpi-value">
-                    {periodo}
+                <div class="section-description">
+                    Potência adicionada em cada período da série.
                 </div>
-
-                <div class="kpi-caption">
-                    série mensal
-                </div>
-
-            </div>
-            """, unsafe_allow_html=True)
-
-        with c4:
-
-            total_registros = len(df)
-
-            st.markdown(f"""
-            <div class="kpi">
-
-                <div class="kpi-label">
-                    REGISTROS MENSAIS
-                </div>
-
-                <div class="kpi-value">
-                    {formatar_numero(total_registros)}
-                </div>
-
-                <div class="kpi-caption">
-                    observações disponíveis
-                </div>
-
-            </div>
-            """, unsafe_allow_html=True)
-
-        # ----------------------------------------------------
-        # EVOLUÇÃO
-        # ----------------------------------------------------
-
-        st.markdown("""
-        <div class="section-title">
-            Evolução da geração distribuída
-        </div>
-
-        <div class="section-description">
-            Crescimento acumulado das conexões e da potência
-            fotovoltaica ao longo da série histórica.
-        </div>
-        """, unsafe_allow_html=True)
-
-        c1, c2 = st.columns(2)
-
-        # ----------------------------------------------------
-        # CONEXÕES
-        # ----------------------------------------------------
-
-        with c1:
-
-            if "conexoes_acumuladas" in df.columns:
+                """, unsafe_allow_html=True)
 
                 fig = go.Figure()
 
                 fig.add_trace(
-                    go.Scatter(
+                    go.Bar(
                         x=df["mes"],
-                        y=df["conexoes_acumuladas"],
-                        mode="lines",
-                        name="Conexões",
-                        line=dict(
-                            color="#1677ff",
-                            width=3
-                        ),
-                        fill="tozeroy",
-                        fillcolor="rgba(22,119,255,0.10)"
+                        y=df["potencia_nova_kw"],
+                        name="Nova potência",
+                        marker_color="#f4b942"
                     )
                 )
 
                 fig.update_layout(
-                    title="Conexões acumuladas"
+                    title="Nova potência instalada por período (kW)"
                 )
 
-                fig = estilo_grafico(fig)
+                fig = estilo_grafico(fig, 380)
 
                 st.plotly_chart(
                     fig,
@@ -533,36 +652,52 @@ with tab_solar:
                     config={"displayModeBar": False}
                 )
 
-        # ----------------------------------------------------
-        # POTÊNCIA
-        # ----------------------------------------------------
 
-        with c2:
+            # ------------------------------------------------
+            # RESUMO ANUAL
+            # ------------------------------------------------
 
-            if "potencia_acumulada_mw" in df.columns:
+            if (
+                "mes" in df.columns
+                and "novas_conexoes" in df.columns
+            ):
+
+                st.markdown("""
+                <div class="section-title">
+                    Visão anual
+                </div>
+
+                <div class="section-description">
+                    Consolidação anual das novas conexões.
+                </div>
+                """, unsafe_allow_html=True)
+
+                df["ano"] = df["mes"].dt.year
+
+                anual = (
+                    df.groupby("ano")["novas_conexoes"]
+                    .sum()
+                    .reset_index()
+                )
 
                 fig = go.Figure()
 
                 fig.add_trace(
-                    go.Scatter(
-                        x=df["mes"],
-                        y=df["potencia_acumulada_mw"],
-                        mode="lines",
-                        name="Potência",
-                        line=dict(
-                            color="#18a999",
-                            width=3
-                        ),
-                        fill="tozeroy",
-                        fillcolor="rgba(24,169,153,0.10)"
+                    go.Bar(
+                        x=anual["ano"],
+                        y=anual["novas_conexoes"],
+                        name="Novas conexões",
+                        marker_color="#1677ff"
                     )
                 )
 
                 fig.update_layout(
-                    title="Potência acumulada (MW)"
+                    title="Novas conexões por ano",
+                    xaxis_title="Ano",
+                    yaxis_title="Conexões"
                 )
 
-                fig = estilo_grafico(fig)
+                fig = estilo_grafico(fig, 400)
 
                 st.plotly_chart(
                     fig,
@@ -570,112 +705,22 @@ with tab_solar:
                     config={"displayModeBar": False}
                 )
 
-        # ----------------------------------------------------
-        # NOVA POTÊNCIA
-        # ----------------------------------------------------
 
-        if "potencia_nova_kw" in df.columns:
-
-            st.markdown("""
-            <div class="section-title">
-                Expansão da capacidade
-            </div>
-
-            <div class="section-description">
-                Potência adicionada em cada período da série.
-            </div>
-            """, unsafe_allow_html=True)
-
-            fig = go.Figure()
-
-            fig.add_trace(
-                go.Bar(
-                    x=df["mes"],
-                    y=df["potencia_nova_kw"],
-                    name="Nova potência",
-                    marker_color="#f4b942"
-                )
-            )
-
-            fig.update_layout(
-                title="Nova potência instalada por período (kW)"
-            )
-
-            fig = estilo_grafico(fig, 380)
-
-            st.plotly_chart(
-                fig,
-                use_container_width=True,
-                config={"displayModeBar": False}
-            )
-
-        # ----------------------------------------------------
-        # RESUMO ANUAL
-        # ----------------------------------------------------
-
-        if (
-            "mes" in df.columns
-            and "novas_conexoes" in df.columns
-        ):
+            # ------------------------------------------------
+            # DADOS
+            # ------------------------------------------------
 
             st.markdown("""
             <div class="section-title">
-                Visão anual
-            </div>
-
-            <div class="section-description">
-                Consolidação anual das novas conexões.
+                Dados consolidados
             </div>
             """, unsafe_allow_html=True)
 
-            df["ano"] = df["mes"].dt.year
-
-            anual = (
-                df.groupby("ano")["novas_conexoes"]
-                .sum()
-                .reset_index()
-            )
-
-            fig = go.Figure()
-
-            fig.add_trace(
-                go.Bar(
-                    x=anual["ano"],
-                    y=anual["novas_conexoes"],
-                    name="Novas conexões",
-                    marker_color="#1677ff"
-                )
-            )
-
-            fig.update_layout(
-                title="Novas conexões por ano",
-                xaxis_title="Ano",
-                yaxis_title="Conexões"
-            )
-
-            fig = estilo_grafico(fig, 400)
-
-            st.plotly_chart(
-                fig,
+            st.dataframe(
+                df.tail(12),
                 use_container_width=True,
-                config={"displayModeBar": False}
+                hide_index=True
             )
-
-        # ----------------------------------------------------
-        # DADOS
-        # ----------------------------------------------------
-
-        st.markdown("""
-        <div class="section-title">
-            Dados consolidados
-        </div>
-        """, unsafe_allow_html=True)
-
-        st.dataframe(
-            df.tail(12),
-            use_container_width=True,
-            hide_index=True
-        )
 
 
 # ============================================================
@@ -692,16 +737,7 @@ with tab_ena:
 
     else:
 
-        df = df_ena.copy()
-
-        if "mes" in df.columns:
-
-            df["mes"] = pd.to_datetime(
-                df["mes"],
-                errors="coerce"
-            )
-
-            df = df.sort_values("mes")
+        df = preparar_data(df_ena)
 
         st.markdown("""
         <div class="banner">
@@ -719,10 +755,10 @@ with tab_ena:
         """, unsafe_allow_html=True)
 
         st.markdown(
-            f"**Registros disponíveis:** {len(df):,}".replace(",", ".")
+            f"**Registros disponíveis:** "
+            f"{len(df):,}".replace(",", ".")
         )
 
-        # Seleciona colunas numéricas
         colunas_numericas = df.select_dtypes(
             include="number"
         ).columns.tolist()
@@ -731,7 +767,6 @@ with tab_ena:
 
             coluna_principal = None
 
-            # Prioriza indicador nacional
             for coluna in colunas_numericas:
 
                 if "nacional" in coluna.lower():
@@ -747,7 +782,11 @@ with tab_ena:
 
             fig.add_trace(
                 go.Scatter(
-                    x=df["mes"] if "mes" in df.columns else df.index,
+                    x=(
+                        df["mes"]
+                        if "mes" in df.columns
+                        else df.index
+                    ),
                     y=df[coluna_principal],
                     mode="lines",
                     name=coluna_principal,
@@ -791,16 +830,7 @@ with tab_bandeiras:
 
     else:
 
-        df = df_bandeiras.copy()
-
-        if "mes" in df.columns:
-
-            df["mes"] = pd.to_datetime(
-                df["mes"],
-                errors="coerce"
-            )
-
-            df = df.sort_values("mes")
+        df = preparar_data(df_bandeiras)
 
         st.markdown("""
         <div class="banner">
@@ -829,7 +859,11 @@ with tab_bandeiras:
 
             fig.add_trace(
                 go.Scatter(
-                    x=df["mes"] if "mes" in df.columns else df.index,
+                    x=(
+                        df["mes"]
+                        if "mes" in df.columns
+                        else df.index
+                    ),
                     y=df[coluna],
                     mode="lines+markers",
                     name=coluna,
@@ -871,11 +905,14 @@ with tab_metodologia:
     </div>
 
     <div class="section-description">
-        Visão geral da organização dos dados utilizados no dashboard.
+        Visão geral da organização dos dados utilizados
+        no dashboard.
     </div>
     """, unsafe_allow_html=True)
 
+
     c1, c2 = st.columns(2)
+
 
     with c1:
 
@@ -884,7 +921,7 @@ with tab_metodologia:
 
         ### Camada de dados
 
-        O dashboard utiliza arquivos em formato Parquet
+        O dashboard utiliza arquivos em formato **Parquet**
         armazenados na camada **Trusted** do projeto.
 
         <br>
@@ -897,6 +934,7 @@ with tab_metodologia:
 
         </div>
         """, unsafe_allow_html=True)
+
 
     with c2:
 
@@ -917,24 +955,26 @@ with tab_metodologia:
         </div>
         """, unsafe_allow_html=True)
 
+
     st.markdown("""
     <div class="section-title">
         Arquitetura simplificada
     </div>
     """, unsafe_allow_html=True)
 
+
     st.code(
         """
 Fontes de dados
-       ↓
+      ↓
 Camada Raw
-       ↓
+      ↓
 Camada Trusted
-       ↓
+      ↓
 Dados consolidados
-       ↓
+      ↓
 Dashboard Streamlit
-       ↓
+      ↓
 Visualização e análise
         """,
         language="text"
